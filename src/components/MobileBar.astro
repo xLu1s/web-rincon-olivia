@@ -1,23 +1,10 @@
 ---
 import Icon from './Icon.astro';
-import { getUi } from '../i18n/ui';
-import { buildOrderMessage, whatsappHref } from '../lib/messages';
 import { siteConfig } from '../data/site';
-
-const ui = getUi();
-const wa = whatsappHref(buildOrderMessage({
-  product: 'un ramo de temporada',
-  occasion: '',
-  date: '',
-  dedication: '',
-}));
+import { buildOrderMessage, whatsappHref } from '../lib/messages';
+const wa = whatsappHref(buildOrderMessage({ product: 'un ramo de temporada', occasion: '', date: '', dedication: '' }));
 ---
-<nav class="mobile-bar" aria-label={ui.bar.label}>
-  <a class="btn bwa" href={wa} target="_blank" rel="noopener noreferrer">
-    <Icon name="wa" />
-    <span>{ui.actions.whatsapp}</span>
-  </a>
-  <a class="btn bcall" href={`tel:${siteConfig.phoneE164}`} aria-label={ui.actions.call}>
-    <Icon name="tel" />
-  </a>
+<nav class="sticky" aria-label="Acciones rápidas">
+  <a class="btn bwa" href={wa} target="_blank" rel="noopener noreferrer"><Icon name="wa" /><span>Pedir por WhatsApp</span></a>
+  <a class="btn bcall" href={`tel:${siteConfig.phoneE164}`} aria-label="Llamar"><Icon name="tel" /></a>
 </nav>
