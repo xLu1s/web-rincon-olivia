@@ -1,0 +1,75 @@
+---
+import Base from '../layouts/Base.astro';
+import Photo from '../components/Photo.astro';
+import { photos } from '../data/photos';
+import { founder, siteConfig } from '../data/site';
+import { url } from '../lib/paths';
+import { breadcrumbJsonLd } from '../lib/schema';
+---
+<Base
+  current="floristeria"
+  title="La floristería | Rincón de Olivia, floristería de autor en Alcoy"
+  description="Una floristería de autor en Alcoy: ramos a mano, flor de temporada y una fundadora ingeniera técnica agrícola. El nombre y la foto están a confirmar."
+  jsonLd={[breadcrumbJsonLd([{ name: 'Inicio', path: '/' }, { name: 'La floristería', path: '/la-floristeria' }])]}
+>
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Migas"><ol><li><a href={url('/')}>Inicio</a></li><li aria-current="page"> / La floristería</li></ol></nav>
+  </div>
+  <div class="hero-media" style="height:440px">
+    <Photo src={photos['05']} alt="Taller de ramo en grupo, con flores sobre la mesa." widths={[800, 1200, 1600]} sizes="100vw" eager />
+  </div>
+  <div class="wrap">
+    <header class="section" style="padding-bottom:12px">
+      <div class="head">
+        <p class="eyebrow">La floristería</p>
+        <h1>Un rincón con flores en el <em>centro</em> de Alcoy</h1>
+        <p class="lede">{siteConfig.name} es una floristería de autor: ramos compuestos a mano, plantas y decoración para bodas y celebraciones. La bio de Instagram lo resume como trabajos artesanales con flores, naturales, secas, preservadas y artificiales, más talleres y decoración de eventos.</p>
+        <p class="small">Texto de presentación de esta demo. La historia larga del taller está a confirmar con la floristería.</p>
+      </div>
+    </header>
+    <section class="section papel">
+      <div class="services">
+        <article><h2 class="h3">Flor de temporada</h2><p class="muted">Lo que da cada estación. Si falta una flor, se cambia por otra del mismo tono y se dice antes.</p></article>
+        <article><h2 class="h3">Hecho en el taller</h2><p class="muted">Cada ramo se compone a mano. No es un catálogo de envío nacional.</p></article>
+        <article><h2 class="h3">Cerca</h2><p class="muted">En Alcoy, para pasar a verlas o encargarlas. La calle exacta está a confirmar.</p></article>
+      </div>
+    </section>
+    <section class="section">
+      <div class="head">
+        <p class="eyebrow">La fundadora</p>
+        <h2>Ingeniera técnica agrícola, <em>florista</em></h2>
+      </div>
+      <p class="lede" style="margin-top:16px">Su formación, publicada en la ficha de bodas, es {founder.training.toLowerCase()}. De ahí el cuidado con la temporada. El nombre no está en las fuentes abiertas que hemos podido leer, y no lo inventamos.</p>
+      <p style="margin-top:12px"><span class="badge bc">Nombre y foto de la fundadora · a confirmar</span></p>
+      <p class="small">No usamos la foto del taller como si fuera su retrato.</p>
+    </section>
+    <section class="section espuma">
+      <div class="split two">
+        <div class="stack">
+          <div class="head">
+            <span class="filete"></span>
+            <p class="eyebrow">El local</p>
+            <h2>Ven a <em>vernos</em></h2>
+          </div>
+          <p class="muted">La foto es la entrada con plantas, de una publicación del Día del Padre. La dirección y el horario están en la ficha de contacto, marcados como a confirmar.</p>
+          <p><a class="btn bsd" href={url('/contacto')}>Cómo llegar y horario</a></p>
+        </div>
+        <div class="frame" style="min-height:280px">
+          <Photo src={photos['15']} alt="Entrada de la floristería con plantas y un cítrico." widths={[640, 960]} sizes="(min-width: 768px) 46vw, 100vw" />
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <h2>En Instagram</h2>
+      <p class="muted" style="margin:12px 0 20px">Una selección de lo publicado. No es un widget: son las mismas fotos de esta web.</p>
+      <div class="product-grid">
+        {(['01', '03', '09', '10', '04', '07'] as const).map((id) => (
+          <a class="frame" href={siteConfig.instagram} target="_blank" rel="noopener noreferrer" aria-label="Ver el Instagram de Rincón de Olivia" style="display:block;height:220px">
+            <Photo src={photos[id]} alt="" widths={[360, 640]} sizes="(min-width: 768px) 30vw, 46vw" />
+          </a>
+        ))}
+      </div>
+      <p style="margin-top:16px"><a href={siteConfig.instagram} target="_blank" rel="noopener noreferrer">{siteConfig.instagramHandle}</a></p>
+    </section>
+  </div>
+</Base>

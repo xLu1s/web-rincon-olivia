@@ -1,0 +1,70 @@
+export type OccasionId =
+  | 'cumpleanos'
+  | 'aniversario'
+  | 'nacimiento'
+  | 'condolencias'
+  | 'gracias';
+
+export type BouquetTypeId = 'fresco' | 'novia' | 'seco';
+
+export type FilterableBouquet = {
+  slug: string;
+  type: BouquetTypeId;
+  occasions: OccasionId[];
+  sameDay: boolean;
+};
+
+export type BouquetFilters = {
+  occasion: OccasionId | 'todas';
+  type: BouquetTypeId | 'todos';
+  forToday: boolean;
+};
+
+export const defaultFilters: BouquetFilters = {
+  occasion: 'todas',
+  type: 'todos',
+  forToday: false,
+};
+
+export function filterBouquets<T extends FilterableBouquet>(items: T[], filters: BouquetFilters): T[] {
+  return items.filter((item) => {
+    if (filters.occasion !== 'todas' && !item.occasions.includes(filters.occasion)) return false;
+    if (filters.type !== 'todos' && item.type !== filters.type) return false;
+    if (filters.forToday && !item.sameDay) return false;
+    return true;
+  });
+}
+
+export function relatedBouquets<T extends { slug: string; type: BouquetTypeId }>(
+  items: T[],
+  slug: string,
+  limit = 3,
+): T[] {
+  const current = items.find((item) => item.slug === slug);
+  const others = items.filter((item) => item.slug !== slug);
+  if (!current) return others.slice(0, limit);
+  const same = others.filter((item) => item.type === current.type);
+  const rest = others.filter((item) => item.type !== current.type);
+  return [...same, ...rest].slice(0, limit);
+}
+
+export function parseFilters(params: URLSearchParams): BouquetFilters {
+  const occasion = params.get('ocasion');
+  const type = params.get('tipo');
+  const occasions: Array<OccasionId | 'todas'> = [
+    'todas',
+    'cumpleanos',
+    'aniversario',
+    'nacimiento',
+    'condolencias',
+    'gracias',
+  ];
+  const types: Array<BouquetTypeId | 'todos'> = ['todos', 'fresco', 'novia', 'seco'];
+  return {
+    occasion: occasions.includes(occasion as OccasionId | 'todas')
+      ? (occasion as OccasionId | 'todas')
+      : 'todas',
+    type: types.includes(type as BouquetTypeId | 'todos') ? (type as BouquetTypeId | 'todos') : 'todos',
+    forToday: params.get('hoy') === '1',
+  };
+}

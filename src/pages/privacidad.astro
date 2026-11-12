@@ -1,0 +1,27 @@
+---
+import Base from '../layouts/Base.astro';
+import { siteConfig } from '../data/site';
+import { url } from '../lib/paths';
+import { breadcrumbJsonLd } from '../lib/schema';
+---
+<Base
+  current=""
+  title="Privacidad | Rincón de Olivia"
+  description="Privacidad de Rincón de Olivia, floristería en Alcoy. La web es estática: el formulario abre WhatsApp o el correo y no envía los datos a un servidor propio."
+  jsonLd={[breadcrumbJsonLd([{ name: 'Inicio', path: '/' }, { name: 'Privacidad', path: '/privacidad' }])]}
+>
+  <div class="wrap section legal">
+    <p class="eyebrow">Legal</p>
+    <h1>Privacidad</h1>
+    <p class="callout warn">Borrador para revisar con asesoría. El responsable del tratamiento (razón social y NIF) está a confirmar.</p>
+    <h2>Qué datos se tratan</h2>
+    <p class="muted">Si pides un ramo o un presupuesto, el mensaje puede llevar nombre, contacto, fecha, lugar y el texto que escribas. Esta web es estática: el formulario no los envía a un servidor de {siteConfig.name}. Abre WhatsApp o tu correo con el mensaje ya escrito.</p>
+    <h2>Para qué</h2>
+    <p class="muted">Para responder a la consulta y preparar el encargo. No hay boletín ni cesión para publicidad en esta demo.</p>
+    <h2>WhatsApp</h2>
+    <p class="muted">Si escribes por WhatsApp al {siteConfig.phoneDisplay} (cuenta de WhatsApp a confirmar), la conversación también se rige por la política de WhatsApp.</p>
+    <h2>Tus derechos</h2>
+    <p class="muted">Puedes pedir acceso, rectificación o supresión escribiendo al teléfono de la floristería. El correo del responsable está a confirmar.</p>
+    <p><a href={url('/aviso-legal')}>Aviso legal</a> · <a href={url('/cookies')}>Cookies</a></p>
+  </div>
+</Base>

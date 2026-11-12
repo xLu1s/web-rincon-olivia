@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import { address, siteConfig } from '../data/site';
+import { url } from '../lib/paths';
+import { breadcrumbJsonLd } from '../lib/schema';
+---
+<Base
+  current=""
+  title="Aviso legal | Rincón de Olivia"
+  description="Aviso legal de Rincón de Olivia, floristería en Alcoy. Titular y NIF a confirmar. Texto para revisar con asesoría antes de publicar."
+  jsonLd={[breadcrumbJsonLd([{ name: 'Inicio', path: '/' }, { name: 'Aviso legal', path: '/aviso-legal' }])]}
+>
+  <div class="wrap section legal">
+    <p class="eyebrow">Legal</p>
+    <h1>Aviso legal</h1>
+    <p class="callout warn">Texto base de esta demo. Hay que revisarlo con la floristería y su asesoría antes de publicarlo como web real.</p>
+    <h2>Titular</h2>
+    <p class="muted">Nombre o razón social: a confirmar. NIF: a confirmar. Dirección postal prevista, también a confirmar: {address.street}, {address.postalCode} {address.locality}. Teléfono: {siteConfig.phoneDisplay}.</p>
+    <h2>Objeto</h2>
+    <p class="muted">Esta web presenta la floristería {siteConfig.name}, en Alcoy, y permite preparar un mensaje de encargo o de presupuesto. No es una tienda con pago en línea.</p>
+    <h2>Propiedad de las fotos</h2>
+    <p class="muted">Las fotografías de ramos, talleres y celebraciones proceden de publicaciones de {siteConfig.instagramHandle}. Su uso en esta demo es para enseñar la propuesta al negocio. Hace falta su permiso para dejarlas en una web pública definitiva.</p>
+    <p><a href={url('/privacidad')}>Privacidad</a> · <a href={url('/cookies')}>Cookies</a></p>
+  </div>
+</Base>

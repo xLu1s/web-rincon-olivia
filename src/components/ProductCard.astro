@@ -1,0 +1,39 @@
+---
+import Photo from './Photo.astro';
+import { photos } from '../data/photos';
+import { url } from '../lib/paths';
+import { getUi } from '../i18n/ui';
+import type { Bouquet } from '../data/catalog';
+
+interface Props { bouquet: Bouquet; }
+const { bouquet } = Astro.props;
+const copy = bouquet.copy.es;
+const ui = getUi();
+---
+<a
+  class="card"
+  href={url(`/ramos/${bouquet.slug}`)}
+  data-bouquet
+  data-slug={bouquet.slug}
+  data-type={bouquet.type}
+  data-occasions={bouquet.occasions.join(',')}
+  data-same-day={bouquet.sameDay ? 'true' : 'false'}
+>
+  <div class="im">
+    <Photo
+      src={photos[bouquet.photo]}
+      alt={copy.alt}
+      widths={[360, 640, 960]}
+      sizes="(min-width: 1280px) 22vw, (min-width: 768px) 30vw, 46vw"
+    />
+    <span class="badge bt">{ui.season}</span>
+  </div>
+  <div class="in">
+    <p class="nm">{copy.name}</p>
+    <p class="ds">{copy.summary}</p>
+    <p class="pr">
+      <span>{ui.priceFrom} <span class="pending-inline">{ui.pricePending}</span> {ui.currency}</span>
+      <span aria-hidden="true">→</span>
+    </p>
+  </div>
+</a>

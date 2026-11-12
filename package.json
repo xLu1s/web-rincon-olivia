@@ -1,0 +1,35 @@
+{
+  "name": "web-rincon-olivia",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "og": "node scripts/og.mjs"
+  },
+  "dependencies": {
+    "@astrojs/react": "^4.4.2",
+    "@astrojs/sitemap": "^3.6.0",
+    "@fontsource/cormorant-garamond": "^5.2.11",
+    "@fontsource/outfit": "^5.2.8",
+    "@radix-ui/react-accordion": "^1.2.12",
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-toggle-group": "^1.1.11",
+    "astro": "^5.15.9",
+    "motion": "^12.23.24",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "sharp": "^0.34.5",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  }
+}

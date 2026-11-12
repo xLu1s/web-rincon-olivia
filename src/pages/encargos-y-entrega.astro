@@ -1,0 +1,74 @@
+---
+import Base from '../layouts/Base.astro';
+import FaqAccordion from '../components/islands/FaqAccordion';
+import { deliveryFaq } from '../data/faq';
+import { delivery, sameDayCutoff } from '../data/site';
+import { getUi } from '../i18n/ui';
+import { url } from '../lib/paths';
+import { breadcrumbJsonLd, faqJsonLd } from '../lib/schema';
+import { buildOrderMessage, whatsappHref } from '../lib/messages';
+
+const ui = getUi();
+const wa = whatsappHref(buildOrderMessage({
+  product: 'un ramo para hoy',
+  occasion: '',
+  date: 'hoy',
+  dedication: '',
+}));
+---
+<Base
+  current="encargos"
+  title="Flores a domicilio en Alcoy | Encargos y entrega | Rincón de Olivia"
+  description="Encarga tu ramo por WhatsApp o teléfono. Recogida en el taller de Alcoy o entrega a domicilio. Zonas, portes y hora límite para hoy: a confirmar."
+  jsonLd={[
+    breadcrumbJsonLd([{ name: 'Inicio', path: '/' }, { name: 'Encargos y entrega', path: '/encargos-y-entrega' }]),
+    faqJsonLd(deliveryFaq),
+  ]}
+>
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Migas"><ol><li><a href={url('/')}>Inicio</a></li><li aria-current="page"> / Encargos y entrega</li></ol></nav>
+    <header class="section" style="padding-bottom:8px">
+      <div class="head">
+        <p class="eyebrow">Encargos y entrega</p>
+        <h1>Cómo te llega tu <em>ramo</em></h1>
+        <p class="lede">Encargas por WhatsApp o por teléfono. Sin carrito ni pago online: te confirmamos disponibilidad y precio en el mensaje.</p>
+      </div>
+    </header>
+    <div class="services" style="padding-bottom:28px">
+      <article>
+        <h2 class="h3">Recogida en el taller</h2>
+        <p class="muted">La floristería está en Alcoy. La calle exacta está a confirmar.</p>
+        <p><a href={url('/contacto')}>Ver la ficha de contacto</a></p>
+        <p><span class="badge bc">Dirección a confirmar</span></p>
+      </article>
+      <article>
+        <h2 class="h3">Envío a domicilio</h2>
+        <p class="muted">Ciudad de la tienda: {delivery.shopCityConfirmed}. El resto de la comarca no está cerrado.</p>
+        <p class="muted">Pueblos citados solo como hipótesis, a confirmar: {delivery.zonesToConfirm.join(', ')}.</p>
+        <p><span class="badge bc">Portes {delivery.fee}</span></p>
+      </article>
+    </div>
+    <section class="note" style="margin-bottom:28px">
+      <p class="badge bh"><i class="dot" aria-hidden="true"></i> Para hoy</p>
+      <h2 class="h3">Para hoy</h2>
+      <p class="muted">Si nos escribes antes de las {sameDayCutoff.label}, intentamos tenerlo hoy con la flor del taller. No es una garantía de unas horas: la hora límite está a confirmar, y también si «hoy» incluye envío o solo recogida.</p>
+      <p><a class="btn bwa" href={wa} target="_blank" rel="noopener noreferrer">Pedir un ramo para hoy</a></p>
+    </section>
+    <section class="stack" style="margin-bottom:36px">
+      <h2>Dedicatoria</h2>
+      <p class="muted">Puedes escribir el texto en el WhatsApp. Si la tarjeta va incluida y si se pasa a mano, está a confirmar.</p>
+      <div class="panel" style="transform:rotate(-1deg);max-width:420px">
+        <p class="eyebrow">Ejemplo, no un encargo real</p>
+        <p class="quote">Feliz cumpleaños. Que este año florezca bonito.</p>
+      </div>
+      <div class="note">
+        <h2 class="h3">¿Y el pago?</h2>
+        <p class="muted">En esta versión no hay pago online. Te confirmamos el precio final y la forma de pago al cerrar el encargo. Bizum, efectivo o tarjeta: a confirmar.</p>
+      </div>
+    </section>
+    <section class="section" style="padding-top:0">
+      <h2>Preguntas <em>frecuentes</em></h2>
+      <FaqAccordion client:visible items={deliveryFaq} />
+    </section>
+  </div>
+</Base>

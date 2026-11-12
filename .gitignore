@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.astro/
+test-results/
+playwright-report/
+docs/capturas/
+blob-report/
+playwright/.cache/
+lighthouse-*.json
+.DS_Store
+*.log

@@ -1,0 +1,58 @@
+---
+import Base from '../layouts/Base.astro';
+import Photo from '../components/Photo.astro';
+import { photos } from '../data/photos';
+import { workshops } from '../data/workshops';
+import { url } from '../lib/paths';
+import { breadcrumbJsonLd } from '../lib/schema';
+import { buildOrderMessage, whatsappHref } from '../lib/messages';
+import { siteConfig } from '../data/site';
+
+const wa = whatsappHref(buildOrderMessage({
+  product: 'una plaza de taller',
+  occasion: 'Taller',
+  date: 'próxima fecha, a confirmar',
+  dedication: '',
+}));
+---
+<Base
+  current="talleres"
+  title="Talleres florales en Alcoy | Coronas, centros y ramos | Rincón de Olivia"
+  description="Talleres florales en Alcoy anunciados en Instagram: coronas, centros de mesa y ramos. Las fechas publicadas ya pasaron. La próxima convocatoria está a confirmar."
+  jsonLd={[breadcrumbJsonLd([{ name: 'Inicio', path: '/' }, { name: 'Talleres', path: '/talleres' }])]}
+>
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Migas"><ol><li><a href={url('/')}>Inicio</a></li><li aria-current="page"> / Talleres</li></ol></nav>
+    <header class="section" style="padding-bottom:12px">
+      <div class="head">
+        <p class="eyebrow">Talleres</p>
+        <h1>Coronas, centros y <em>ramos</em></h1>
+        <p class="lede">En Instagram anuncian talleres de coronas, centros de mesa y ramos. Aquí solo está lo que dice cada publicación. Lo que no aparece, queda a confirmar.</p>
+      </div>
+    </header>
+    <div class="stack" style="padding-bottom:72px">
+      {workshops.map((item) => (
+        <article class="split two" style="align-items:start">
+          <div class="frame">
+            <Photo src={photos[item.photo]} alt={item.copy.es.alt} widths={[480, 800]} sizes="(min-width: 768px) 42vw, 100vw" />
+          </div>
+          <div class="stack">
+            <h2>{item.copy.es.title}</h2>
+            <p class="muted">{item.copy.es.summary}</p>
+            <ul class="muted">
+              {item.copy.es.facts.map((fact) => <li>{fact}</li>)}
+            </ul>
+            {item.announcedPrice ? <p>Precio anunciado entonces: <strong>{item.announcedPrice}</strong></p> : <p><span class="badge bc">Precio a confirmar</span></p>}
+            <p class="callout warn">{item.copy.es.pending}</p>
+            <p class="small"><a href={item.instagramPost} target="_blank" rel="noopener noreferrer">Publicación del {item.instagramDate}</a></p>
+          </div>
+        </article>
+      ))}
+      <section class="note">
+        <h2 class="h3">Reservar la próxima</h2>
+        <p class="muted">En los anuncios, las reservas eran por mensaje directo. Uno de ellos también deja el {siteConfig.phoneDisplay}. La próxima fecha, el precio y las plazas están a confirmar.</p>
+        <p><a class="btn bwa" href={wa} target="_blank" rel="noopener noreferrer">Preguntar por WhatsApp</a></p>
+      </section>
+    </div>
+  </div>
+</Base>

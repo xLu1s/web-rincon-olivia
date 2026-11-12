@@ -1,0 +1,81 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { address, hours, siteConfig } from '../data/site';
+import { getUi } from '../i18n/ui';
+import { url } from '../lib/paths';
+import { breadcrumbJsonLd } from '../lib/schema';
+import { buildOrderMessage, whatsappHref } from '../lib/messages';
+
+const ui = getUi();
+const wa = whatsappHref(buildOrderMessage({ product: 'un ramo de temporada', occasion: '', date: '', dedication: '' }));
+const mapsQuery = encodeURIComponent(`${address.street}, ${address.postalCode} ${address.locality}`);
+---
+<Base
+  current="contacto"
+  title="Contacto | Floristería en Alcoy | Rincón de Olivia"
+  description="WhatsApp y teléfono 628 48 41 02. Floristería en Alcoy: la dirección y el horario están a confirmar. La forma más rápida es WhatsApp."
+  jsonLd={[breadcrumbJsonLd([{ name: 'Inicio', path: '/' }, { name: 'Contacto', path: '/contacto' }])]}
+>
+  <div class="wrap">
+    <header class="section" style="padding-bottom:12px">
+      <div class="head c">
+        <span class="filete"></span>
+        <p class="eyebrow">Contacto</p>
+        <h1><em>Hablemos</em></h1>
+        <p class="lede">La forma más rápida es WhatsApp. También puedes llamar o pasar por el taller. Estos datos aparecen solo en esta página.</p>
+      </div>
+    </header>
+    <div class="contact-grid" style="padding-bottom:80px">
+      <div class="mapph">
+        <Icon name="pin" />
+        <p><strong>Mapa pendiente</strong></p>
+        <p class="small">No incrustamos el mapa hasta confirmar si es Placeta el Fossar, 3, o {address.alternative}.</p>
+        <p class="small"><a href={`https://www.google.com/maps/search/?api=1&query=${mapsQuery}`} target="_blank" rel="noopener noreferrer">Buscar «{address.street}» en Google Maps</a></p>
+      </div>
+      <div class="panel">
+        <span class="filete"></span>
+        <h2>Visítanos</h2>
+        <div class="cinfo">
+          <Icon name="pin" />
+          <div>
+            <span class="k">Dirección</span>
+            <span>{address.street}, {address.postalCode} {address.locality}, {address.region}</span>
+            <p style="margin-top:6px"><span class="badge bc">A confirmar</span></p>
+            <p class="small">{address.alternativeNote}</p>
+          </div>
+        </div>
+        <div class="cinfo">
+          <Icon name="tel" />
+          <div>
+            <span class="k">Teléfono</span>
+            <a href={`tel:${siteConfig.phoneE164}`}>{siteConfig.phoneDisplay}</a>
+          </div>
+        </div>
+        <div class="cinfo">
+          <Icon name="wa" />
+          <div>
+            <span class="k">WhatsApp</span>
+            <span>{siteConfig.phoneDisplay}</span>
+            <p class="small" style="color:var(--error)">Mismo número · pendiente de confirmar</p>
+          </div>
+        </div>
+        <div class="hours">
+          <p class="eyebrow" style="color:var(--tinta)">Horario</p>
+          <p class="small" style="color:var(--error)">{hours.note}</p>
+          {hours.rows.map((row) => <p class="muted">{row.days} · {row.value}</p>)}
+        </div>
+        <div class="cinfo">
+          <Icon name="ig" />
+          <div>
+            <span class="k">Instagram</span>
+            <a href={siteConfig.instagram} target="_blank" rel="noopener noreferrer">{siteConfig.instagramHandle}</a>
+          </div>
+        </div>
+        <p class="small">Correo electrónico: a confirmar. El presupuesto de boda puede abrirse en tu programa de correo, sin destinatario todavía.</p>
+        <a class="btn bwa" href={wa} target="_blank" rel="noopener noreferrer"><Icon name="wa" /> {ui.actions.whatsapp}</a>
+        <a class="btn bcall" href={`tel:${siteConfig.phoneE164}`}><Icon name="tel" /> {ui.actions.call}</a>
+      </div>
+    </div>
+  </div>
+</Base>
