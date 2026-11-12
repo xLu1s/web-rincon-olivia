@@ -1,0 +1,14 @@
+---
+import Icon from './Icon.astro';
+import { address } from '../data/site';
+interface Props { height?: string; }
+const { height = '240px' } = Astro.props;
+const q = encodeURIComponent(`${address.street}, ${address.postalCode} ${address.locality}`);
+---
+<div class="mapph" style={`height:${height}`}>
+  <div class="mapgrid"></div>
+  <div class="pin"><Icon name="pin" /></div>
+  <b style="font:500 16px Outfit;position:relative">Mapa cuando la dirección esté confirmada</b>
+  <span class="bs" style="position:relative">{address.street} · ubicación a confirmar</span>
+  <a class="bs" style="position:relative" href={`https://www.google.com/maps/search/?api=1&query=${q}`} target="_blank" rel="noopener noreferrer">Buscar la calle en Google Maps</a>
+</div>

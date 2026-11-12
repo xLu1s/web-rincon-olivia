@@ -28,6 +28,11 @@ describe('filterBouquets', () => {
     expect(filterBouquets(bouquets, filters({ occasion: 'condolencias' }))).toEqual([]);
   });
 
+  it('filtra por color como en el diseño', () => {
+    const slugs = filterBouquets(bouquets, filters({ color: 'crema' })).map((item) => item.slug);
+    expect(slugs).toEqual(['hortensia-blanca']);
+  });
+
   it('para hoy no marca ningún ramo mientras la hora límite esté a confirmar', () => {
     expect(bouquets.every((item) => item.sameDay === false)).toBe(true);
     expect(filterBouquets(bouquets, filters({ forToday: true }))).toEqual([]);
@@ -37,7 +42,7 @@ describe('filterBouquets', () => {
 describe('parseFilters', () => {
   it('lee la query y ignora valores desconocidos', () => {
     const params = new URLSearchParams('ocasion=nacimiento&tipo=fresco&hoy=1');
-    expect(parseFilters(params)).toEqual({ occasion: 'nacimiento', type: 'fresco', forToday: true });
+    expect(parseFilters(params)).toEqual({ occasion: 'nacimiento', type: 'fresco', color: 'todos', forToday: true });
     expect(parseFilters(new URLSearchParams('ocasion=funeral&tipo=rosa'))).toEqual(defaultFilters);
   });
 });

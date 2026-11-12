@@ -1,84 +1,62 @@
 ---
 import Icon from './Icon.astro';
-import { getUi } from '../i18n/ui';
+import { siteConfig } from '../data/site';
 import { url } from '../lib/paths';
 import { buildOrderMessage, whatsappHref } from '../lib/messages';
-import { siteConfig } from '../data/site';
-import { localeLabels } from '../i18n/index';
 
 interface Props { current?: string; }
 const { current = '' } = Astro.props;
-const ui = getUi();
-const wa = whatsappHref(buildOrderMessage({
-  product: 'un ramo de temporada',
-  occasion: '',
-  date: '',
-  dedication: '',
-}));
-const links = [
-  { id: 'ramos', href: url('/ramos'), label: ui.nav.ramos },
-  { id: 'plantas', href: url('/plantas'), label: ui.nav.plantas },
-  { id: 'bodas', href: url('/bodas-y-eventos'), label: ui.nav.bodas },
-  { id: 'talleres', href: url('/talleres'), label: ui.nav.talleres },
-  { id: 'encargos', href: url('/encargos-y-entrega'), label: ui.nav.encargos },
-  { id: 'floristeria', href: url('/la-floristeria'), label: ui.nav.floristeria },
-  { id: 'contacto', href: url('/contacto'), label: ui.nav.contacto },
+const wa = whatsappHref(buildOrderMessage({ product: 'un ramo de temporada', occasion: '', date: '', dedication: '' }));
+const left = [
+  { id: 'ramos', href: url('/ramos'), label: 'Ramos' },
+  { id: 'plantas', href: url('/plantas'), label: 'Plantas' },
+  { id: 'bodas', href: url('/bodas-y-eventos'), label: 'Bodas y eventos' },
+  { id: 'encargos', href: url('/encargos-y-entrega'), label: 'Encargos' },
 ];
-const left = links.slice(0, 4);
-const right = links.slice(4);
+const right = [
+  { id: 'floristeria', href: url('/la-floristeria'), label: 'La floristería' },
+  { id: 'contacto', href: url('/contacto'), label: 'Contacto' },
+];
+const all = [
+  ...left,
+  { id: 'talleres', href: url('/talleres'), label: 'Talleres' },
+  ...right,
+];
 ---
 <header class="site-header">
   <div class="hdr">
-    <nav class="nav-links" aria-label={ui.nav.primary}>
-      {left.map((link) => (
-        <a href={link.href} aria-current={current === link.id ? 'page' : undefined}>{link.label}</a>
-      ))}
-    </nav>
     <a class="wm" href={url('/')}>
       <b>{siteConfig.name}</b>
       <small>{siteConfig.tagline}</small>
     </a>
-    <div class="nav-right">
-      <span class="desk-only">
-        {right.map((link) => (
-          <a class="nav-link" href={link.href} aria-current={current === link.id ? 'page' : undefined}>{link.label}</a>
-        ))}
-        <span class="lang" aria-label={ui.lang.label}>
-          <span lang="es" aria-current="true">{localeLabels.es.short}</span>
-          <span aria-hidden="true">·</span>
-          <button type="button" lang="ca-ES" disabled title={ui.lang.vaPending}>{localeLabels.va.short}</button>
-        </span>
-      </span>
-      <a class="btn bwa sm hdr-wa" href={wa} target="_blank" rel="noopener noreferrer" aria-label={ui.actions.whatsapp}>
-        <Icon name="wa" />
-        <span>{ui.actions.whatsapp}</span>
-      </a>
+    <div class="row" style="gap:8px">
+      <a class="btn bwa sm wa-tab" href={wa} target="_blank" rel="noopener noreferrer"><Icon name="wa" /><span>WhatsApp</span></a>
       <details class="menu">
-        <summary class="hit" aria-label={ui.nav.menu}><Icon name="menu" /></summary>
+        <summary class="hit" aria-label="Abrir el menú"><Icon name="menu" /></summary>
         <div class="menu-panel">
-          {links.map((link) => (
+          {all.map((link) => (
             <a href={link.href} aria-current={current === link.id ? 'page' : undefined}>{link.label}</a>
           ))}
-          <div class="lang">
-            <span lang="es" aria-current="true">{localeLabels.es.short}</span>
-            <button type="button" lang="ca-ES" disabled>{localeLabels.va.short}</button>
-            <span class="sr-only">{ui.lang.vaPending}</span>
-          </div>
         </div>
       </details>
     </div>
   </div>
+  <div class="hdrd">
+    <nav class="nav" aria-label="Principal">
+      {left.map((link) => (
+        <a class={current === link.id ? 'on' : ''} href={link.href} aria-current={current === link.id ? 'page' : undefined}>{link.label}</a>
+      ))}
+    </nav>
+    <a class="wm c" href={url('/')}>
+      <b>{siteConfig.name}</b>
+      <small>{siteConfig.tagline}</small>
+    </a>
+    <div class="nav r">
+      {right.map((link) => (
+        <a class={current === link.id ? 'on' : ''} href={link.href} aria-current={current === link.id ? 'page' : undefined}>{link.label}</a>
+      ))}
+      <span><b style="color:#2C241C">ES</b> · <span style="opacity:.6" title="Valenciano, próximamente">VA</span></span>
+      <a class="btn bwa sm" href={wa} target="_blank" rel="noopener noreferrer"><Icon name="wa" /><span>Pedir por WhatsApp</span></a>
+    </div>
+  </div>
 </header>
-
-<style>
-  .hdr-wa { display: none; }
-  .desk-only { display: none !important; }
-  @media (min-width: 768px) {
-    .hdr-wa { display: inline-flex; }
-  }
-  @media (min-width: 1280px) {
-    .desk-only { display: contents !important; }
-    .hdr-wa span { display: none; }
-    .hdr-wa { min-width: 44px; padding-inline: 14px; }
-  }
-</style>

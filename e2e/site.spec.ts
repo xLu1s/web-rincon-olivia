@@ -3,21 +3,24 @@ import { expect, test } from '@playwright/test';
 const pages = [
   ['Ramos', /\/ramos\/$/],
   ['Plantas', /\/plantas\/$/],
-  ['Bodas', /\/bodas-y-eventos\/$/],
-  ['Talleres', /\/talleres\/$/],
+  ['Bodas y eventos', /\/bodas-y-eventos\/$/],
   ['Encargos', /\/encargos-y-entrega\/$/],
   ['La floristería', /\/la-floristeria\/$/],
   ['Contacto', /\/contacto\/$/],
 ] as const;
 
 test('el menú recorre las páginas y cada una tiene un solo h1', async ({ page }) => {
-  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.setViewportSize({ width: 1440, height: 900 });
   for (const [name, path] of pages) {
     await page.goto('./');
     await page.locator('.site-header').getByRole('link', { name, exact: true }).click();
     await expect(page).toHaveURL(path);
     await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
   }
+  await page.goto('./');
+  await page.locator('footer').getByRole('link', { name: 'Talleres', exact: true }).click();
+  await expect(page).toHaveURL(/\/talleres\/$/);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
   await page.goto('./');
   await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
   await page.goto('aviso-legal/');
@@ -44,7 +47,7 @@ test('los filtros de ramos funcionan igual y condolencias no abre una página de
   await expect(page.getByRole('link', { name: /Angela/ })).toBeVisible();
   await expect(page.getByRole('link', { name: /Ciudad y campo/ })).toBeHidden();
 
-  await page.getByRole('radio', { name: 'Todos', exact: true }).click();
+  await page.getByRole('radiogroup', { name: 'Tipo' }).getByRole('radio', { name: 'Todos', exact: true }).click();
   await page.getByRole('radio', { name: 'Condolencias', exact: true }).click();
   await expect(page.getByText(/no tiene página propia/i)).toBeVisible();
   await expect(page.getByRole('link', { name: /Angela/ })).toBeHidden();

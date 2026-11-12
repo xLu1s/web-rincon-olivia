@@ -1,4 +1,4 @@
-import type { BouquetTypeId, OccasionId } from '../lib/filters';
+import type { BouquetTypeId, ColorId, OccasionId } from '../lib/filters';
 
 export type PhotoId =
   | '01'
@@ -29,6 +29,7 @@ export type Bouquet = {
   slug: string;
   photo: PhotoId;
   type: BouquetTypeId;
+  color: ColorId;
   occasions: OccasionId[];
   /** Ninguno está confirmado para entrega en el día. */
   sameDay: false;
@@ -47,6 +48,7 @@ export const bouquets: Bouquet[] = [
     slug: 'ciudad-y-campo',
     photo: '01',
     type: 'fresco',
+    color: 'mixto',
     occasions: ['cumpleanos', 'aniversario', 'gracias'],
     sameDay: false,
     instagramPost: 'https://www.instagram.com/rincondeolivia/p/DfNe-gPiEQg/',
@@ -67,6 +69,7 @@ export const bouquets: Bouquet[] = [
     slug: 'silvestre',
     photo: '02',
     type: 'fresco',
+    color: 'amarillo',
     occasions: ['cumpleanos', 'nacimiento', 'gracias'],
     sameDay: false,
     instagramPost: 'https://www.instagram.com/rincondeolivia/p/DaqOoLGiCkc/',
@@ -87,6 +90,7 @@ export const bouquets: Bouquet[] = [
     slug: 'angela',
     photo: '03',
     type: 'novia',
+    color: 'mixto',
     occasions: [],
     sameDay: false,
     instagramPost: 'https://www.instagram.com/rincondeolivia/p/Dc-_69HCLWN/',
@@ -107,6 +111,7 @@ export const bouquets: Bouquet[] = [
     slug: 'seco-preservado',
     photo: '04',
     type: 'seco',
+    color: 'mixto',
     occasions: ['gracias', 'aniversario'],
     sameDay: false,
     instagramPost: 'https://www.instagram.com/rincondeolivia/p/DYMH8CYCGxH/',
@@ -127,6 +132,7 @@ export const bouquets: Bouquet[] = [
     slug: 'hortensia-blanca',
     photo: '10',
     type: 'novia',
+    color: 'crema',
     occasions: [],
     sameDay: false,
     instagramPost: 'https://www.instagram.com/rincondeolivia/p/DO9OuuSiEa-/',
@@ -146,6 +152,7 @@ export const bouquets: Bouquet[] = [
     slug: 'rosas-celebracion',
     photo: '12',
     type: 'fresco',
+    color: 'rosa',
     occasions: ['aniversario', 'gracias'],
     sameDay: false,
     instagramPost: 'https://www.instagram.com/rincondeolivia/p/DNBlbLvMQp_/',
@@ -165,6 +172,7 @@ export const bouquets: Bouquet[] = [
     slug: 'san-valentin',
     photo: '08',
     type: 'fresco',
+    color: 'rosa',
     occasions: [],
     sameDay: false,
     instagramPost: 'https://www.instagram.com/rincondeolivia/p/DUWJrrbCFI7/',

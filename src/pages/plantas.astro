@@ -1,20 +1,13 @@
 ---
 import Base from '../layouts/Base.astro';
 import Photo from '../components/Photo.astro';
+import Icon from '../components/Icon.astro';
 import { photos } from '../data/photos';
 import { url } from '../lib/paths';
 import { breadcrumbJsonLd, productJsonLd } from '../lib/schema';
 import { buildOrderMessage, whatsappHref } from '../lib/messages';
-import { getUi } from '../i18n/ui';
-
-const ui = getUi();
-const wa = whatsappHref(buildOrderMessage({
-  product: 'una planta de temporada',
-  occasion: 'Regalo',
-  date: '',
-  dedication: '',
-}));
-const alt = 'Plantas, un cítrico y macetas a la entrada de la floristería, de noche.';
+const wa = whatsappHref(buildOrderMessage({ product: 'una planta de temporada', occasion: 'Regalo', date: '', dedication: '' }));
+const alt = 'Plantas y un cítrico en la entrada de la floristería.';
 ---
 <Base
   current="plantas"
@@ -22,42 +15,29 @@ const alt = 'Plantas, un cítrico y macetas a la entrada de la floristería, de 
   description="Plantas para casa, vistas en la floristería de Alcoy. Te contamos luz y riego por WhatsApp. Variedad y precios a confirmar."
   jsonLd={[
     breadcrumbJsonLd([{ name: 'Inicio', path: '/' }, { name: 'Plantas', path: '/plantas' }]),
-    productJsonLd({
-      name: 'Plantas de temporada',
-      description: 'Plantas expuestas en la entrada de la floristería. La variedad y el precio están a confirmar.',
-      image: new URL(photos['15'].src, Astro.site).href,
-      path: '/plantas',
-    }),
+    productJsonLd({ name: 'Plantas de temporada', description: 'Plantas expuestas en la entrada. Variedad y precio a confirmar.', image: new URL(photos['15'].src, Astro.site).href, path: '/plantas' }),
   ]}
 >
-  <div class="wrap">
-    <nav class="crumbs" aria-label="Migas"><ol><li><a href={url('/')}>Inicio</a></li><li aria-current="page"> / Plantas</li></ol></nav>
-    <header class="section" style="padding-bottom:20px">
-      <div class="head">
-        <p class="eyebrow">Plantas</p>
-        <h1>Plantas para <em>casa</em></h1>
-        <p class="lede">En marzo de 2023 publicaron plantas y un cítrico a la puerta, pensando en el Día del Padre. No inventamos un catálogo de especies: lo que hay cada semana se confirma en el taller.</p>
-      </div>
-    </header>
-    <div class="product-grid" style="padding-bottom:28px">
+  <div class="block tight">
+    <div class="eyebrow">Plantas</div>
+    <h1 class="h1">Plantas para <em>casa</em></h1>
+    <p class="bm">Plantas en maceta, elegidas para que vivan. En el Día del Padre publicaron plantas y un cítrico a la puerta. La variedad está a confirmar.</p>
+  </div>
+  <div class="block" style="padding-top:0">
+    <div class="grid2">
       <a class="card" href={wa} target="_blank" rel="noopener noreferrer">
-        <div class="im">
-          <Photo src={photos['15']} alt={alt} widths={[480, 800]} sizes="(min-width: 768px) 40vw, 100vw" />
-        </div>
-        <div class="in">
-          <p class="nm">Plantas de temporada</p>
-          <p class="ds">Lo que se ve a la entrada. Interior, exterior y cuidados: a confirmar en cada caso.</p>
-          <p class="pr"><span>{ui.priceFrom} <span class="pending-inline">{ui.pricePending}</span> {ui.currency}</span><span aria-hidden="true">→</span></p>
-        </div>
+        <div class="im"><Photo src={photos['15']} alt={alt} widths={[480, 800]} sizes="46vw" /></div>
+        <div class="in"><div class="nm">Plantas de temporada</div><div class="ds">Lo que se ve a la entrada</div><div class="pr"><span>desde a confirmar</span><Icon name="arrow" /></div></div>
       </a>
     </div>
-    <section class="note" style="margin-bottom:72px">
-      <h2 class="h3">Cuidados básicos</h2>
-      <p class="muted">Casi todas las plantas de interior prefieren luz indirecta, cerca de una ventana.</p>
-      <p class="muted">Riego: mejor poco, cuando la tierra esté seca al tacto.</p>
-      <p class="muted">Si dudas, mándanos una foto por WhatsApp y te orientamos.</p>
-      <p class="small">Consejos generales. El cuidado de cada planta que compres se confirma al llevarla.</p>
-      <p><a class="btn bwa" href={wa} target="_blank" rel="noopener noreferrer">Preguntar por WhatsApp</a></p>
-    </section>
+    <div class="col papel r16" style="padding:24px;gap:12px;margin-top:24px">
+      <div class="filete"></div>
+      <div class="h3">Cuidados básicos</div>
+      <div class="cinfo"><Icon name="sun" /><p class="bm ink">Luz: casi todas prefieren luz indirecta, cerca de una ventana.</p></div>
+      <div class="cinfo"><Icon name="drop" /><p class="bm ink">Riego: mejor poco y cuando la tierra esté seca al tacto.</p></div>
+      <div class="cinfo"><Icon name="leaf" /><p class="bm ink">¿Dudas? Escríbenos una foto por WhatsApp y te decimos.</p></div>
+      <p class="bs">Consejos generales, no el cuidado de una planta concreta.</p>
+    </div>
+    <a class="btn bwa" style="margin-top:16px" href={wa} target="_blank" rel="noopener noreferrer"><Icon name="wa" /><span>Preguntar por WhatsApp</span></a>
   </div>
 </Base>

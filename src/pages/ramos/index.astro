@@ -2,7 +2,6 @@
 import Base from '../../layouts/Base.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import BouquetFilters from '../../components/islands/BouquetFilters';
-import SpotlightCard from '../../components/islands/SpotlightCard';
 import { bouquets } from '../../data/catalog';
 import { getUi } from '../../i18n/ui';
 import { breadcrumbJsonLd } from '../../lib/schema';
@@ -23,6 +22,12 @@ const labels = {
   allOccasions: ui.filters.allOccasions,
   allTypes: ui.filters.allTypes,
   today: ui.filters.today,
+  color: 'Color',
+  allColors: 'Todos',
+  rosa: 'Rosa y blush',
+  crema: 'Crema',
+  amarillo: 'Amarillo',
+  mixto: 'Mixto',
   fresco: ui.filters.fresco,
   novia: ui.filters.novia,
   seco: ui.filters.seco,
@@ -42,36 +47,28 @@ const labels = {
   description="Ramos compuestos en el taller de Alcoy, con flor de temporada. Para cumpleaños, aniversario, nacimiento y más. Pide por WhatsApp. El precio «desde» está a confirmar."
   jsonLd={[breadcrumbJsonLd([{ name: 'Inicio', path: '/' }, { name: 'Ramos', path: '/ramos' }])]}
 >
-  <div class="wrap">
-    <nav class="crumbs" aria-label="Migas">
-      <ol>
-        <li><a href={import.meta.env.BASE_URL}>Inicio</a></li>
-        <li aria-current="page"> / Ramos</li>
-      </ol>
-    </nav>
-    <header class="section" style="padding-bottom:12px">
-      <div class="head">
-        <p class="eyebrow">Ramos</p>
-        <h1>Ramos de <em>temporada</em></h1>
-        <p class="lede">Compuestos en el taller, con flor de temporada. El precio es «desde a confirmar €»: te decimos el final por WhatsApp.</p>
-        <p class="small">Hora límite para encargos de hoy: {sameDayCutoff.label}.</p>
+  <div class="block tight">
+    <div class="head">
+      <div class="eyebrow">Ramos</div>
+      <h1 class="h1">Ramos de <em>temporada</em></h1>
+      <p class="bl" style="max-width:640px">Compuestos en el taller, con flor de temporada. Precios «desde a confirmar»; te confirmamos el final por WhatsApp.</p>
+      <p class="bs">Hora límite para encargos de hoy: {sameDayCutoff.label}.</p>
+    </div>
+  </div>
+  <div class="catalog">
+    <div class="col" style="gap:28px">
+      <BouquetFilters client:visible labels={labels} />
+      <div class="col blushbg r16" style="padding:24px;gap:12px">
+        <div class="h4">¿Uno a medida?</div>
+        <p class="bm ink">Cuéntanos ocasión, colores y para cuándo.</p>
+        <a class="btn bwa full sm" href={custom} target="_blank" rel="noopener noreferrer"><span>WhatsApp</span></a>
       </div>
-    </header>
-    <div class="catalog" style="padding-bottom:72px">
-      <div class="stack">
-        <BouquetFilters client:visible labels={labels} />
-        <SpotlightCard client:visible>
-          <h2 class="h3">¿Uno a medida?</h2>
-          <p>Cuéntanos ocasión, colores y para cuándo. El presupuesto también está a confirmar.</p>
-          <a class="btn bwa full sm" href={custom} target="_blank" rel="noopener noreferrer">WhatsApp</a>
-        </SpotlightCard>
-      </div>
-      <div class="stack">
-        <p class="muted" data-bouquet-count>{bouquets.length} ramos</p>
-        <p class="empty" data-bouquet-empty hidden>{ui.empty.none}</p>
-        <div class="product-grid">
-          {bouquets.map((bouquet) => <ProductCard bouquet={bouquet} />)}
-        </div>
+    </div>
+    <div class="col" style="gap:20px">
+      <p class="bm" data-bouquet-count>{bouquets.length} ramos</p>
+      <p class="bm" data-bouquet-empty hidden>{ui.empty.none}</p>
+      <div class="ramos-grid">
+        {bouquets.map((bouquet) => <ProductCard bouquet={bouquet} />)}
       </div>
     </div>
   </div>

@@ -5,6 +5,7 @@ import {
   parseFilters,
   type BouquetFilters,
   type BouquetTypeId,
+  type ColorId,
   type FilterableBouquet,
   type OccasionId,
 } from '../../lib/filters';
@@ -16,6 +17,12 @@ type Labels = {
   allOccasions: string;
   allTypes: string;
   today: string;
+  color: string;
+  allColors: string;
+  rosa: string;
+  crema: string;
+  amarillo: string;
+  mixto: string;
   fresco: string;
   novia: string;
   seco: string;
@@ -31,12 +38,14 @@ type Labels = {
 
 const occasions: Array<OccasionId | 'todas'> = ['todas', 'cumpleanos', 'aniversario', 'nacimiento', 'condolencias', 'gracias'];
 const types: Array<BouquetTypeId | 'todos'> = ['todos', 'fresco', 'novia', 'seco'];
+const colors: Array<ColorId | 'todos'> = ['todos', 'rosa', 'crema', 'amarillo', 'mixto'];
 
 function readCards(): Array<FilterableBouquet & { el: HTMLElement }> {
   return [...document.querySelectorAll<HTMLElement>('[data-bouquet]')].map((el) => ({
     el,
     slug: el.dataset.slug ?? '',
     type: (el.dataset.type ?? 'fresco') as BouquetTypeId,
+    color: (el.dataset.color ?? 'mixto') as ColorId,
     occasions: (el.dataset.occasions ?? '').split(',').filter(Boolean) as OccasionId[],
     sameDay: el.dataset.sameDay === 'true',
   }));
@@ -49,7 +58,7 @@ function emptyMessage(filters: BouquetFilters, labels: Labels): string {
 }
 
 export default function BouquetFilters({ labels }: { labels: Labels }) {
-  const [filters, setFilters] = useState<BouquetFilters>({ occasion: 'todas', type: 'todos', forToday: false });
+  const [filters, setFilters] = useState<BouquetFilters>({ occasion: 'todas', type: 'todos', color: 'todos', forToday: false });
   const [hydrated, setHydrated] = useState(false);
 
   function apply(next: BouquetFilters) {
@@ -70,6 +79,7 @@ export default function BouquetFilters({ labels }: { labels: Labels }) {
     const params = new URLSearchParams();
     if (next.occasion !== 'todas') params.set('ocasion', next.occasion);
     if (next.type !== 'todos') params.set('tipo', next.type);
+    if (next.color !== 'todos') params.set('color', next.color);
     if (next.forToday) params.set('hoy', '1');
     const query = params.toString();
     const path = window.location.pathname;
@@ -109,7 +119,7 @@ export default function BouquetFilters({ labels }: { labels: Labels }) {
           aria-labelledby="filtro-ocasion"
         >
           {occasions.map((id) => (
-            <ToggleGroupItem key={id} value={id}>{occasionLabel[id]}</ToggleGroupItem>
+            <ToggleGroupItem className="chip" key={id} value={id}>{occasionLabel[id]}</ToggleGroupItem>
           ))}
         </ToggleGroup>
       </div>
@@ -122,7 +132,22 @@ export default function BouquetFilters({ labels }: { labels: Labels }) {
           aria-labelledby="filtro-tipo"
         >
           {types.map((id) => (
-            <ToggleGroupItem key={id} value={id}>{typeLabel[id]}</ToggleGroupItem>
+            <ToggleGroupItem className="chip" key={id} value={id}>{typeLabel[id]}</ToggleGroupItem>
+          ))}
+        </ToggleGroup>
+      </div>
+      <div>
+        <span className="filter-label" id="filtro-color">{labels.color}</span>
+        <ToggleGroup
+          type="single"
+          value={filters.color}
+          onValueChange={(value) => apply({ ...filters, color: (value || 'todos') as ColorId | 'todos' })}
+          aria-labelledby="filtro-color"
+        >
+          {colors.map((id) => (
+            <ToggleGroupItem className="chip" key={id} value={id}>
+              {id === 'todos' ? labels.allColors : id === 'rosa' ? labels.rosa : id === 'crema' ? labels.crema : id === 'amarillo' ? labels.amarillo : labels.mixto}
+            </ToggleGroupItem>
           ))}
         </ToggleGroup>
       </div>

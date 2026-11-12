@@ -2,22 +2,17 @@
 import Base from '../layouts/Base.astro';
 import { url } from '../lib/paths';
 import { buildOrderMessage, whatsappHref } from '../lib/messages';
-
 const wa = whatsappHref(buildOrderMessage({ product: 'un ramo de temporada', occasion: '', date: '', dedication: '' }));
 ---
-<Base
-  title="Página no encontrada | Rincón de Olivia"
-  description="Esta página no está en la web de Rincón de Olivia, floristería en Alcoy."
-  noindex
->
-  <div class="wrap section stack" style="min-height:50vh">
-    <p class="eyebrow">404</p>
-    <h1>Esta página no está en el <em>taller</em></h1>
-    <p class="lede">El enlace no lleva a ningún ramo. Puedes volver al inicio o mirar lo que hay ahora mismo.</p>
-    <div class="row-btns">
-      <a class="btn bp" href={url('/')}>Ir al inicio</a>
-      <a class="btn bsd" href={url('/ramos')}>Ver ramos</a>
-      <a class="btn bwa" href={wa} target="_blank" rel="noopener noreferrer">Pedir por WhatsApp</a>
+<Base title="Página no encontrada | Rincón de Olivia" description="Esta página no está en la web de Rincón de Olivia, floristería en Alcoy." noindex>
+  <div class="block">
+    <div class="eyebrow">404</div>
+    <h1 class="h1">Esta página no está en el <em>taller</em></h1>
+    <p class="bl">El enlace no lleva a ningún ramo.</p>
+    <div class="row" style="flex-wrap:wrap">
+      <a class="btn bp" href={url('/')}><span>Ir al inicio</span></a>
+      <a class="btn bsd" href={url('/ramos')}><span>Ver ramos</span></a>
+      <a class="btn bwa" href={wa} target="_blank" rel="noopener noreferrer"><span>Pedir por WhatsApp</span></a>
     </div>
   </div>
 </Base>
