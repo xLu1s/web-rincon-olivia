@@ -1,0 +1,63 @@
+---
+import Base from '../layouts/Base.astro';
+import Photo from '../components/Photo.astro';
+import { photos } from '../data/photos';
+import { url } from '../lib/paths';
+import { breadcrumbJsonLd, productJsonLd } from '../lib/schema';
+import { buildOrderMessage, whatsappHref } from '../lib/messages';
+import { getUi } from '../i18n/ui';
+
+const ui = getUi();
+const wa = whatsappHref(buildOrderMessage({
+  product: 'una planta de temporada',
+  occasion: 'Regalo',
+  date: '',
+  dedication: '',
+}));
+const alt = 'Plantas, un cítrico y macetas a la entrada de la floristería, de noche.';
+---
+<Base
+  current="plantas"
+  title="Plantas de interior y exterior en Alcoy | Rincón de Olivia"
+  description="Plantas para casa, vistas en la floristería de Alcoy. Te contamos luz y riego por WhatsApp. Variedad y precios a confirmar."
+  jsonLd={[
+    breadcrumbJsonLd([{ name: 'Inicio', path: '/' }, { name: 'Plantas', path: '/plantas' }]),
+    productJsonLd({
+      name: 'Plantas de temporada',
+      description: 'Plantas expuestas en la entrada de la floristería. La variedad y el precio están a confirmar.',
+      image: new URL(photos['15'].src, Astro.site).href,
+      path: '/plantas',
+    }),
+  ]}
+>
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Migas"><ol><li><a href={url('/')}>Inicio</a></li><li aria-current="page"> / Plantas</li></ol></nav>
+    <header class="section" style="padding-bottom:20px">
+      <div class="head">
+        <p class="eyebrow">Plantas</p>
+        <h1>Plantas para <em>casa</em></h1>
+        <p class="lede">En marzo de 2023 publicaron plantas y un cítrico a la puerta, pensando en el Día del Padre. No inventamos un catálogo de especies: lo que hay cada semana se confirma en el taller.</p>
+      </div>
+    </header>
+    <div class="product-grid" style="padding-bottom:28px">
+      <a class="card" href={wa} target="_blank" rel="noopener noreferrer">
+        <div class="im">
+          <Photo src={photos['15']} alt={alt} widths={[480, 800]} sizes="(min-width: 768px) 40vw, 100vw" />
+        </div>
+        <div class="in">
+          <p class="nm">Plantas de temporada</p>
+          <p class="ds">Lo que se ve a la entrada. Interior, exterior y cuidados: a confirmar en cada caso.</p>
+          <p class="pr"><span>{ui.priceFrom} <span class="pending-inline">{ui.pricePending}</span> {ui.currency}</span><span aria-hidden="true">→</span></p>
+        </div>
+      </a>
+    </div>
+    <section class="note" style="margin-bottom:72px">
+      <h2 class="h3">Cuidados básicos</h2>
+      <p class="muted">Casi todas las plantas de interior prefieren luz indirecta, cerca de una ventana.</p>
+      <p class="muted">Riego: mejor poco, cuando la tierra esté seca al tacto.</p>
+      <p class="muted">Si dudas, mándanos una foto por WhatsApp y te orientamos.</p>
+      <p class="small">Consejos generales. El cuidado de cada planta que compres se confirma al llevarla.</p>
+      <p><a class="btn bwa" href={wa} target="_blank" rel="noopener noreferrer">Preguntar por WhatsApp</a></p>
+    </section>
+  </div>
+</Base>

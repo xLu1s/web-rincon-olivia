@@ -1,0 +1,221 @@
+---
+import Base from '../layouts/Base.astro';
+import Photo from '../components/Photo.astro';
+import ProductCard from '../components/ProductCard.astro';
+import Icon from '../components/Icon.astro';
+import HeroMark from '../components/islands/HeroMark';
+import BlurFade from '../components/islands/BlurFade';
+import { bouquets } from '../data/catalog';
+import { photos } from '../data/photos';
+import { getUi } from '../i18n/ui';
+import { url } from '../lib/paths';
+import { buildOrderMessage, whatsappHref } from '../lib/messages';
+import { sameDayCutoff } from '../data/site';
+
+const ui = getUi();
+const hero = bouquets[0];
+const featured = ['ciudad-y-campo', 'silvestre', 'angela', 'hortensia-blanca'].map((slug) => bouquets.find((item) => item.slug === slug)!);
+const wa = whatsappHref(buildOrderMessage({ product: 'un ramo de temporada', occasion: '', date: '', dedication: '' }));
+
+const occasions = [
+  { id: 'cumpleanos', photo: '01' as const, text: false },
+  { id: 'aniversario', photo: '12' as const, text: false },
+  { id: 'nacimiento', photo: '02' as const, text: false },
+  { id: 'condolencias', photo: null, text: true },
+  { id: 'gracias', photo: '04' as const, text: false },
+];
+
+const dates = [
+  { name: 'Día de la Madre', occasion: 'Día de la Madre', date: 'la fecha de este año', photo: null },
+  { name: 'San Valentín', occasion: 'San Valentín', date: '14 de febrero', photo: '08' as const },
+  { name: 'Sant Jordi', occasion: 'Sant Jordi', date: '23 de abril', photo: null },
+  { name: 'Moros y Cristianos', occasion: 'Moros y Cristianos', date: 'las fiestas de Alcoy, a confirmar', photo: null },
+  { name: 'Navidad', occasion: 'Navidad', date: 'Navidad', photo: '14' as const },
+];
+---
+<Base
+  current=""
+  title="Floristería en Alcoy | Ramos, plantas y flores para bodas | Rincón de Olivia"
+  description="Floristería de autor en Alcoy. Ramos de temporada, plantas y decoración floral para bodas y eventos. Encarga por WhatsApp. Recogida en el taller o entrega: la zona está a confirmar."
+>
+  <section class="hero">
+    <div class="hero-media">
+      <Photo
+        src={photos[hero.photo]}
+        alt={hero.copy.es.alt}
+        widths={[640, 960, 1280]}
+        sizes="(min-width: 1280px) 50vw, 100vw"
+        eager
+      />
+    </div>
+    <div class="hero-copy">
+      <HeroMark client:idle />
+      <p class="eyebrow">Floristería de autor · Alcoy</p>
+      <h1>Flores <em>con alma</em>, en el centro de Alcoy.</h1>
+      <BlurFade client:idle>
+        <p class="lede">Ramos a medida, plantas y decoración floral para bodas y eventos. Te atendemos en la tienda o por WhatsApp.</p>
+      </BlurFade>
+      <p class="badge bh"><i class="dot" aria-hidden="true"></i> Encargos para hoy · hora límite {sameDayCutoff.label}</p>
+      <div class="row-btns">
+        <a class="btn bwa" href={wa} target="_blank" rel="noopener noreferrer"><Icon name="wa" /><span>{ui.actions.whatsapp}</span></a>
+        <a class="btn bsd" href={url('/ramos')}>{ui.actions.seeBouquets}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="promesas">
+    <div class="wrap">
+      <h2 id="promesas" class="sr-only">Cómo trabajamos</h2>
+      <div class="trust">
+        <article>
+          <strong>Compuesto en el taller de Alcoy</strong>
+          <p class="muted">Cada ramo se prepara a mano, con la flor que hay esa semana.</p>
+        </article>
+        <article>
+          <strong>Flor de temporada</strong>
+          <p class="muted">Puede cambiar el tallo. El tono lo confirmamos antes de hacerlo.</p>
+        </article>
+        <article>
+          <strong>Sin pago en la web</strong>
+          <p class="muted">Te confirmamos disponibilidad y precio por WhatsApp.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section espuma" aria-labelledby="ocasiones">
+    <div class="wrap stack">
+      <div class="head c">
+        <span class="filete"></span>
+        <p class="eyebrow">Ocasiones</p>
+        <h2 id="ocasiones">Para cada <em>ocasión</em>, un ramo</h2>
+      </div>
+      <div class="occ-grid">
+        {occasions.map((item) => (
+          <a class:list={['occ', { texty: item.text }]} href={url(`/ramos/?ocasion=${item.id}`)}>
+            {item.photo ? (
+              <Photo class="ph" src={photos[item.photo]} alt="" widths={[320, 480]} sizes="(min-width: 1280px) 18vw, (min-width: 768px) 30vw, 100vw" />
+            ) : null}
+            <span class="filete" style="width:24px"></span>
+            <h3>{ui.occasions[item.id]}</h3>
+            <p class="small">{ui.priceFrom} <span class="pending-inline">{ui.pricePending}</span> {ui.currency}</p>
+            {item.text ? <p class="small">Servicio de funeral a confirmar. No hay página propia.</p> : <p class="small">Foto de un ramo del taller, no de un encargo con este nombre.</p>}
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="fechas">
+    <div class="wrap stack">
+      <div class="head c">
+        <span class="filete"></span>
+        <p class="eyebrow">Fechas señaladas</p>
+        <h2 id="fechas">Cuando el calendario <em>pide flores</em></h2>
+        <p class="lede">Día de la Madre, San Valentín, Sant Jordi, Moros y Cristianos y Navidad. No hay una página por fecha: el ramo se prepara a medida.</p>
+      </div>
+      <div class="date-grid">
+        {dates.map((item) => (
+          <a class:list={['date-card', { texty: !item.photo }]} href={whatsappHref(buildOrderMessage({ product: 'un ramo de temporada', occasion: item.occasion, date: item.date, dedication: '' }))} target="_blank" rel="noopener noreferrer">
+            {item.photo ? <Photo class="ph" src={photos[item.photo]} alt="" widths={[320, 480]} sizes="(min-width: 1280px) 18vw, 100vw" /> : null}
+            <h3>{item.name}</h3>
+            <p class="small">Pedir por WhatsApp · precio {ui.pricePending}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="ramos-ahora">
+    <div class="wrap stack">
+      <div class="head">
+        <span class="filete"></span>
+        <p class="eyebrow">Ramos de ahora</p>
+        <h2 id="ramos-ahora">Ramos con <em>nombre propio</em></h2>
+        <p class="lede">Los que han publicado en Instagram. Compuestos en el taller, con flor de temporada.</p>
+      </div>
+      <div class="product-grid home">
+        {featured.map((bouquet) => <ProductCard bouquet={bouquet} />)}
+      </div>
+      <p><a class="btn bsd" href={url('/ramos')}>{ui.actions.seeAll}</a></p>
+    </div>
+  </section>
+
+  <section class="feature" aria-labelledby="bodas-home">
+    <div class="feature-photo">
+      <Photo src={photos['09']} alt="Mesa de la boda A&A con flores y frutas, publicada por la floristería." widths={[640, 960, 1200]} sizes="(min-width: 1280px) 50vw, 100vw" />
+    </div>
+    <div class="feature-copy">
+      <div class="head">
+        <span class="filete"></span>
+        <p class="eyebrow">Bodas y eventos</p>
+        <h2 id="bodas-home">Escuchamos vuestra historia y la traducimos <em>en flores</em>.</h2>
+      </div>
+      <p class="lede">Ramo de novia, mesa y celebraciones. En Instagram hay una boda con flores y frutas, el ramo Angela y una hortensia blanca.</p>
+      <p><a class="btn bp" href={url('/bodas-y-eventos')}>Pedir presupuesto de boda</a></p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap split two">
+      <div class="frame" style="min-height:320px">
+        <Photo src={photos['05']} alt="Grupo en un taller de ramo, con flores sueltas sobre la mesa." widths={[640, 960]} sizes="(min-width: 1280px) 40vw, 100vw" />
+      </div>
+      <div class="stack">
+        <div class="head">
+          <span class="filete"></span>
+          <p class="eyebrow">Quién está detrás</p>
+          <h2>Una ingeniera agrícola <em>entre flores</em>.</h2>
+        </div>
+        <p class="lede">La fundadora es ingeniera técnica agrícola. En la ficha pública de bodas se cuenta que trabaja con la temporada y el entorno. No copiamos ese texto: el relato largo lo contará ella.</p>
+        <p><span class="badge bc">Nombre de la fundadora · a confirmar</span></p>
+        <p class="small">La foto es de un taller grupal, no un retrato de la fundadora.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section espuma">
+    <div class="wrap split two">
+      <div class="stack">
+        <div class="head">
+          <span class="filete"></span>
+          <p class="eyebrow">Plantas</p>
+          <h2>Plantas para casa y <em>para regalar</em></h2>
+        </div>
+        <p class="lede">En el Día del Padre publicaron plantas y un cítrico a la entrada del local. La variedad y el precio están a confirmar.</p>
+        <p><a class="btn bsd" href={url('/plantas')}>{ui.actions.seePlants}</a></p>
+      </div>
+      <div class="frame" style="min-height:320px">
+        <Photo src={photos['15']} alt="Plantas y un cítrico en la entrada de la floristería, de noche." widths={[640, 960]} sizes="(min-width: 1280px) 40vw, 100vw" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="pasos">
+    <div class="wrap stack">
+      <div class="head c">
+        <span class="filete"></span>
+        <p class="eyebrow">Cómo pedir</p>
+        <h2 id="pasos">Tu ramo en <em>tres pasos</em></h2>
+      </div>
+      <div class="steps">
+        <article class="step">
+          <div class="n">01</div>
+          <h3>Elige tu ramo</h3>
+          <p class="muted">Mira lo publicado o cuéntanos qué tienes en mente.</p>
+        </article>
+        <article class="step">
+          <div class="n">02</div>
+          <h3>Escríbenos por WhatsApp</h3>
+          <p class="muted">El mensaje sale con el ramo, la ocasión, la fecha y la dedicatoria. También puedes llamar.</p>
+        </article>
+        <article class="step">
+          <div class="n">03</div>
+          <h3>Recógelo o te lo llevamos</h3>
+          <p class="muted">En Alcoy. La zona de entrega y el porte están a confirmar. Pagas al confirmar el encargo, no en la web.</p>
+        </article>
+      </div>
+      <p class="center-title"><a class="btn bsd" href={url('/contacto')}>Ver contacto y horario</a></p>
+    </div>
+  </section>
+</Base>

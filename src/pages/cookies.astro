@@ -1,0 +1,19 @@
+---
+import Base from '../layouts/Base.astro';
+import { url } from '../lib/paths';
+import { breadcrumbJsonLd } from '../lib/schema';
+---
+<Base
+  current=""
+  title="Cookies | Rincón de Olivia"
+  description="Cookies de Rincón de Olivia. Esta demo no instala cookies de análisis ni de publicidad, ni incrusta el mapa de Google."
+  jsonLd={[breadcrumbJsonLd([{ name: 'Inicio', path: '/' }, { name: 'Cookies', path: '/cookies' }])]}
+>
+  <div class="wrap section legal">
+    <p class="eyebrow">Legal</p>
+    <h1>Cookies</h1>
+    <p class="muted">Esta demo no instala cookies de análisis ni de publicidad. No hay sesión ni carrito. El mapa de Google no está incrustado, para no cargar sus cookies mientras la dirección esté a confirmar.</p>
+    <p class="muted">Si más adelante se añade un mapa o una medición de visitas, esta página y el aviso tendrán que actualizarse, y pedir consentimiento cuando haga falta.</p>
+    <p><a href={url('/aviso-legal')}>Aviso legal</a> · <a href={url('/privacidad')}>Privacidad</a></p>
+  </div>
+</Base>

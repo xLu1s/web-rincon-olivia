@@ -1,0 +1,144 @@
+---
+import Base from '../layouts/Base.astro';
+import Photo from '../components/Photo.astro';
+import FaqAccordion from '../components/islands/FaqAccordion';
+import QuoteForm from '../components/islands/QuoteForm';
+import Lightbox from '../components/islands/Lightbox';
+import { photos } from '../data/photos';
+import { portfolio } from '../data/catalog';
+import { weddingFaq } from '../data/faq';
+import { getUi } from '../i18n/ui';
+import { url } from '../lib/paths';
+import { breadcrumbJsonLd, faqJsonLd, serviceJsonLd } from '../lib/schema';
+
+const ui = getUi();
+---
+<Base
+  current="bodas"
+  title="Florista de bodas en Alcoy | Ramos de novia y decoración floral | Rincón de Olivia"
+  description="Decoración floral para bodas y eventos en Alcoy: ramo de novia y mesa, con flor de temporada. Presupuesto sin pago en la web, por formulario, WhatsApp o correo."
+  jsonLd={[
+    breadcrumbJsonLd([{ name: 'Inicio', path: '/' }, { name: 'Bodas y eventos', path: '/bodas-y-eventos' }]),
+    serviceJsonLd(),
+    faqJsonLd(weddingFaq),
+  ]}
+>
+  <section class="hero">
+    <div class="hero-media">
+      <Photo src={photos['09']} alt="Mesa de la boda A&A, con flores, frutas y verde." widths={[640, 1100, 1400]} sizes="(min-width: 1280px) 50vw, 100vw" eager />
+    </div>
+    <div class="hero-copy">
+      <p class="eyebrow">Bodas y eventos</p>
+      <h1>Flores para un día que se parece a <em>vosotros</em></h1>
+      <p class="lede">Escuchamos vuestra historia y la traducimos en flores. El presupuesto no se paga en la web.</p>
+      <p><a class="btn bp" href="#presupuesto">Pedir presupuesto de boda</a></p>
+    </div>
+  </section>
+
+  <section class="section papel">
+    <div class="wrap stack" style="align-items:center;text-align:center">
+      <span class="filete"></span>
+      <p class="quote">Nos gustan las celebraciones con flor de verdad: lo que da la temporada, compuesto para ese día y no sacado de un catálogo cerrado.</p>
+      <p class="eyebrow">Manifiesto de estilo</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap stack">
+      <div class="head">
+        <span class="filete"></span>
+        <p class="eyebrow">Portfolio</p>
+        <h2>Bodas y <em>celebraciones</em></h2>
+        <p class="lede">Solo fotos publicadas en su Instagram. Toca una imagen para verla más grande. El enlace abre la publicación.</p>
+      </div>
+      <div class="shots">
+        {portfolio.map((item) => (
+          <figure class="shot" data-lightbox>
+            <Photo src={photos[item.photo]} alt={item.copy.es.alt} widths={[360, 640]} sizes="(min-width: 1280px) 28vw, (min-width: 768px) 45vw, 100vw" />
+            <figcaption>{item.copy.es.title}</figcaption>
+            <p class="small">{item.copy.es.detail}</p>
+            <a href={item.instagramPost} target="_blank" rel="noopener noreferrer">Ver en Instagram</a>
+          </figure>
+        ))}
+      </div>
+      <Lightbox client:idle closeLabel="Cerrar" />
+    </div>
+  </section>
+
+  <section class="section espuma">
+    <div class="wrap stack">
+      <div class="head">
+        <span class="filete"></span>
+        <p class="eyebrow">Servicios</p>
+        <h2>Qué <em>hacemos</em></h2>
+      </div>
+      <div class="services">
+        <article><h3>Ramo de novia</h3><p class="muted">Angela, con dalias, y la hortensia blanca están publicados como ramos de novia.</p></article>
+        <article><h3>Mesa y banquete</h3><p class="muted">La boda A&A se decoró con flores y frutas. Otros montajes de mesa están a confirmar.</p></article>
+        <article><h3>Celebraciones</h3><p class="muted">También hay decoración en blanco, un montaje rústico y rosas para una celebración.</p></article>
+        <article><h3>Coronas</h3><p class="muted">Han publicado una corona de flores para comuniones. El precio está a confirmar.</p></article>
+        <article><h3>Estilo</h3><p class="muted">En su ficha de bodas hablan de un estilo natural y elegante, y también romántico, clásico o minimalista. Se adapta al presupuesto: el cómo, a confirmar.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap stack">
+      <div class="head c">
+        <span class="filete"></span>
+        <p class="eyebrow">Proceso</p>
+        <h2>Cuatro pasos, <em>sin prisas</em></h2>
+      </div>
+      <div class="steps four">
+        <article class="step"><div class="n">01</div><h3>Nos escribís</h3><p class="muted">Por el formulario, WhatsApp o llamada.</p></article>
+        <article class="step"><div class="n">02</div><h3>Hablamos</h3><p class="muted">Una llamada o una visita. La forma exacta está a confirmar.</p></article>
+        <article class="step"><div class="n">03</div><h3>Propuesta</h3><p class="muted">Estilo y presupuesto. El cierre no se hace en esta web.</p></article>
+        <article class="step"><div class="n">04</div><h3>El día</h3><p class="muted">Montaje y recogida: el alcance se acuerda en el presupuesto.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section papel">
+    <div class="wrap split two">
+      <div class="stack">
+        <div class="head">
+          <span class="filete"></span>
+          <p class="eyebrow">Presupuesto</p>
+          <h2>Contadnos <em>vuestra boda</em></h2>
+          <p class="lede">Sin pago ni compromiso. El mensaje se abre en WhatsApp o en vuestro correo. Esta web no guarda el formulario: no hay servidor detrás.</p>
+        </div>
+      </div>
+      <QuoteForm
+        client:visible
+        labels={{
+          names: ui.form.names,
+          date: ui.form.date,
+          dateHint: ui.form.dateHint,
+          place: ui.form.place,
+          style: ui.form.style,
+          guests: ui.form.guests,
+          guestsError: ui.form.guestsError,
+          contact: ui.form.contact,
+          message: ui.form.message,
+          privacy: ui.form.privacy,
+          required: ui.form.required,
+          send: ui.actions.weddingQuote,
+          mail: ui.actions.openMail,
+          noPay: 'Sin pago online. El número de WhatsApp está a confirmar.',
+        }}
+      />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap split two">
+      <div class="head">
+        <span class="filete"></span>
+        <p class="eyebrow">Preguntas</p>
+        <h2>Preguntas <em>frecuentes</em></h2>
+        <p class="lede">Donde aún no hay un dato del taller, la respuesta lo dice.</p>
+      </div>
+      <FaqAccordion client:visible items={weddingFaq} />
+    </div>
+  </section>
+</Base>

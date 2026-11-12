@@ -1,0 +1,125 @@
+---
+import Base from '../../layouts/Base.astro';
+import Photo from '../../components/Photo.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import OrderForm from '../../components/islands/OrderForm';
+import { bouquetBySlug, bouquets } from '../../data/catalog';
+import { photos } from '../../data/photos';
+import { getUi } from '../../i18n/ui';
+import { url } from '../../lib/paths';
+import { breadcrumbJsonLd, productJsonLd } from '../../lib/schema';
+import { relatedBouquets } from '../../lib/filters';
+import { siteConfig } from '../../data/site';
+
+export function getStaticPaths() {
+  return bouquets.map((bouquet) => ({ params: { slug: bouquet.slug } }));
+}
+
+const { slug } = Astro.params;
+const bouquet = bouquetBySlug(slug ?? '');
+if (!bouquet) throw new Error('Ramo no encontrado');
+const copy = bouquet.copy.es;
+const ui = getUi();
+const related = relatedBouquets(bouquets, bouquet.slug, 3);
+const image = new URL(photos[bouquet.photo].src, Astro.site).href;
+const occasion = bouquet.slug === 'angela' || bouquet.slug === 'hortensia-blanca'
+  ? 'Boda'
+  : bouquet.slug === 'san-valentin'
+    ? 'San Valentín'
+    : 'a confirmar';
+---
+<Base
+  current="ramos"
+  title={`Ramo ${copy.name} | Floristería en Alcoy | Rincón de Olivia`}
+  description={`${copy.summary} Encárgalo por WhatsApp para recogida o entrega en Alcoy. El precio está a confirmar.`}
+  jsonLd={[
+    breadcrumbJsonLd([
+      { name: 'Inicio', path: '/' },
+      { name: 'Ramos', path: '/ramos' },
+      { name: copy.name, path: `/ramos/${bouquet.slug}` },
+    ]),
+    productJsonLd({
+      name: `Ramo ${copy.name}`,
+      description: copy.description,
+      image,
+      path: `/ramos/${bouquet.slug}`,
+    }),
+  ]}
+>
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Migas">
+      <ol>
+        <li><a href={url('/')}>Inicio</a></li>
+        <li><a href={url('/ramos')}>Ramos</a></li>
+        <li aria-current="page"> / {copy.name}</li>
+      </ol>
+    </nav>
+    <article class="product section">
+      <div class="product-photo">
+        <Photo
+          src={photos[bouquet.photo]}
+          alt={copy.alt}
+          widths={[640, 960, 1200]}
+          sizes="(min-width: 1280px) 42vw, 100vw"
+          eager
+        />
+      </div>
+      <div class="stack">
+        <p class="badge bt">Temporada</p>
+        <h1>{copy.name}</h1>
+        <p class="price-lg">{ui.priceFrom} <span class="pending-inline">{ui.pricePending}</span> {ui.currency}</p>
+        <p class="lede">{copy.description}</p>
+        <div class="note">
+          <p><strong>Flor de temporada</strong></p>
+          <p class="muted">{copy.flowersNote}</p>
+        </div>
+        <p class="small">
+          <a href={bouquet.instagramPost} target="_blank" rel="noopener noreferrer">Ver la publicación de Instagram ({bouquet.instagramDate})</a>
+        </p>
+        <OrderForm
+          client:visible
+          product={`Ramo ${copy.name}`}
+          occasion={occasion}
+          tel={`tel:${siteConfig.phoneE164}`}
+          labels={{
+            size: ui.order.size,
+            small: 'Pequeño',
+            medium: 'Mediano',
+            large: 'Grande',
+            when: ui.order.when,
+            today: ui.order.today,
+            tomorrow: ui.order.tomorrow,
+            other: ui.order.other,
+            date: ui.order.dateLabel,
+            delivery: ui.order.delivery,
+            pickup: ui.order.pickup,
+            ship: ui.order.ship,
+            dedication: ui.order.dedication,
+            optional: ui.order.optional,
+            dedicationPh: ui.order.dedicationPh,
+            extra: ui.order.extra,
+            extraPh: ui.order.extraPh,
+            preview: ui.order.preview,
+            send: ui.actions.whatsapp,
+            call: ui.actions.call,
+            noPay: ui.order.noPay,
+            priceNote: 'a confirmar',
+          }}
+        />
+        <h2 class="h3">Cuidados del ramo</h2>
+        <ul class="muted">
+          <li>Corta los tallos en diagonal al llegar a casa.</li>
+          <li>Cambia el agua cada dos días.</li>
+          <li>Aléjalo del sol directo y de la fruta.</li>
+        </ul>
+        <p class="small">Consejos generales de cuidado, no una garantía de duración.</p>
+      </div>
+    </article>
+    <section class="section" style="padding-top:0">
+      <h2>También te puede <em>gustar</em></h2>
+      <div class="product-grid" style="margin-top:20px">
+        {related.map((item) => <ProductCard bouquet={item} />)}
+      </div>
+    </section>
+  </div>
+</Base>

@@ -1,0 +1,52 @@
+---
+import { getUi } from '../i18n/ui';
+import { siteConfig } from '../data/site';
+import { url } from '../lib/paths';
+import Icon from './Icon.astro';
+
+const ui = getUi();
+const year = 2026;
+---
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="wm">
+      <b>{siteConfig.name}</b>
+      <small>{siteConfig.tagline}</small>
+    </div>
+    <p class="small logo-note">{ui.footer.logoPending}</p>
+    <hr class="rule" />
+    <div class="foot-grid">
+      <nav aria-label={ui.footer.shop}>
+        <h2 class="h3">{ui.footer.shop}</h2>
+        <a href={url('/ramos')}>{ui.nav.ramos}</a><br />
+        <a href={url('/plantas')}>{ui.nav.plantas}</a><br />
+        <a href={url('/bodas-y-eventos')}>{ui.nav.bodas}</a><br />
+        <a href={url('/talleres')}>{ui.nav.talleres}</a>
+      </nav>
+      <nav aria-label={ui.footer.corner}>
+        <h2 class="h3">{ui.footer.corner}</h2>
+        <a href={url('/encargos-y-entrega')}>{ui.nav.encargos}</a><br />
+        <a href={url('/la-floristeria')}>{ui.nav.floristeria}</a><br />
+        <a href={url('/contacto')}>{ui.nav.contacto}</a>
+      </nav>
+      <div>
+        <h2 class="h3">{ui.footer.follow}</h2>
+        <a href={siteConfig.instagram} target="_blank" rel="noopener noreferrer">
+          <Icon name="ig" size={20} /> {siteConfig.instagramHandle}
+        </a>
+      </div>
+    </div>
+    <hr class="rule" />
+    <div class="foot-base">
+      <p class="small">© {year} {siteConfig.name} · {ui.footer.rights}</p>
+      <p class="small">
+        <a href={url('/aviso-legal')}>{ui.footer.legal}</a>
+        {' · '}
+        <a href={url('/privacidad')}>{ui.footer.privacy}</a>
+        {' · '}
+        <a href={url('/cookies')}>{ui.footer.cookies}</a>
+      </p>
+    </div>
+    <p class="small">{ui.footer.demo}</p>
+  </div>
+</footer>
